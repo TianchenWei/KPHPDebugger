@@ -57,13 +57,12 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 		fThread = new KPHPThread(this);
 		fThreads = new IThread[] {fThread};
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
-		init();
+		
+		interpreter.debug(launch.getAttribute(), file)
 		
 	}
 	
-	private void init(){
 
-	}
 	
 	/**
 	 * 

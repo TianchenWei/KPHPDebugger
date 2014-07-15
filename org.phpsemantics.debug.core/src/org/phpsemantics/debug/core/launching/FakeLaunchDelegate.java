@@ -29,14 +29,18 @@ public class FakeLaunchDelegate implements ILaunchConfigurationDelegate{
 		
 		KPHPInterpreter ki = new KPHPInterpreter(ktool, kphp);
 		
-	
-		if(mode.equals(ILaunchManager.RUN_MODE)){
-		
 		String file = configuration.getAttribute(
 				IKPHPLaunchConfigurationConstants.ATTR_FILE_TO_DEBUG, "");
-		String tempDir =configuration.getAttribute(
-				IKPHPLaunchConfigurationConstants.ATTR_TEMP_DIR, 
-						IKPHPLaunchConfigurationConstants.DEFAULT_TEMP_DIR);
+		
+	
+		if(mode.equals(ILaunchManager.RUN_MODE)){
+			
+			try {
+				ki.printOutput(ki.run(file));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	
 		}
 		
@@ -44,7 +48,7 @@ public class FakeLaunchDelegate implements ILaunchConfigurationDelegate{
 		if(mode.equals(ILaunchManager.DEBUG_MODE)){
 				
 			IDebugTarget target;
-
+			ki.debug("bb", file);
 			target = new KPHPDebugTarget(launch, ki);
 			launch.addDebugTarget(target);
 

@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
 import org.eclipse.core.runtime.IAdaptable;
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 
@@ -62,125 +64,6 @@ public class ConfigView extends ViewPart {
 	 * it and always show the same content 
 	 * (like Task List, for example).
 	 */
-	 
-	class TreeObject implements IAdaptable {
-		private String name;
-		private TreeParent parent;
-		
-		public TreeObject(String name) {
-			this.name = name;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setParent(TreeParent parent) {
-			this.parent = parent;
-		}
-		public TreeParent getParent() {
-			return parent;
-		}
-		public String toString() {
-			return getName();
-		}
-		public Object getAdapter(Class key) {
-			return null;
-		}
-	}
-	
-	class TreeParent extends TreeObject {
-		private ArrayList children;
-		public TreeParent(String name) {
-			super(name);
-			children = new ArrayList();
-		}
-		public void addChild(TreeObject child) {
-			children.add(child);
-			child.setParent(this);
-		}
-		public void removeChild(TreeObject child) {
-			children.remove(child);
-			child.setParent(null);
-		}
-		public TreeObject [] getChildren() {
-			return (TreeObject [])children.toArray(new TreeObject[children.size()]);
-		}
-		public boolean hasChildren() {
-			return children.size()>0;
-		}
-	}
-
-	class ViewContentProvider implements IStructuredContentProvider, 
-										   ITreeContentProvider {
-		private TreeParent invisibleRoot;
-
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-		}
-		public void dispose() {
-		}
-		public Object[] getElements(Object parent) {
-			if (parent.equals(getViewSite())) {
-				if (invisibleRoot==null) initialize();
-				return getChildren(invisibleRoot);
-			}
-			return getChildren(parent);
-		}
-		public Object getParent(Object child) {
-			if (child instanceof TreeObject) {
-				return ((TreeObject)child).getParent();
-			}
-			return null;
-		}
-		public Object [] getChildren(Object parent) {
-			if (parent instanceof TreeParent) {
-				return ((TreeParent)parent).getChildren();
-			}
-			return new Object[0];
-		}
-		public boolean hasChildren(Object parent) {
-			if (parent instanceof TreeParent)
-				return ((TreeParent)parent).hasChildren();
-			return false;
-		}
-/*
- * We will set up a dummy model to initialize tree heararchy.
- * In a real code, you will connect to a real model and
- * expose its hierarchy.
- */
-		private void initialize() {
-			TreeObject to1 = new TreeObject("Leaf 1");
-			TreeObject to2 = new TreeObject("Leaf 2");
-			TreeObject to3 = new TreeObject("Leaf 3");
-			TreeParent p1 = new TreeParent("Parent 1");
-			p1.addChild(to1);
-			p1.addChild(to2);
-			p1.addChild(to3);
-			
-			TreeObject to4 = new TreeObject("Leaf 4");
-			TreeParent p2 = new TreeParent("Parent 2");
-			p2.addChild(to4);
-			
-			TreeParent root = new TreeParent("Root");
-			root.addChild(p1);
-			root.addChild(p2);
-			
-			invisibleRoot = new TreeParent("");
-			invisibleRoot.addChild(root);
-		}
-	}
-	class ViewLabelProvider extends LabelProvider {
-
-		public String getText(Object obj) {
-			return obj.toString();
-		}
-		public Image getImage(Object obj) {
-			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
-			if (obj instanceof TreeParent)
-			   imageKey = ISharedImages.IMG_OBJ_FOLDER;
-			return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
-		}
-	}
-	class NameSorter extends ViewerSorter {
-	}
 
 	/**
 	 * The constructor.
@@ -199,14 +82,17 @@ public class ConfigView extends ViewPart {
 		viewer.setLabelProvider(new ConfigLabelProvider());*/
 		viewer.setContentProvider(new ConfigTreePathContentProvider());
 		viewer.setLabelProvider(new ConfigTreePathLabelProvider(new ConfigLabelProvider()));
-		viewer.setSorter(new NameSorter());
 		Document doc = new Document();
+		
+		File file = new File("/homes/tw1613/git/PHPdebugger.views/org.phpsemantics.debug.ui/examples/config.xml");
+		SAXBuilder jdomBuilder = new SAXBuilder();
+			  
 		try {
-			File file = new File("/homes/tw1613/git/PHPdebugger.views/org.phpsemantics.debug.ui/examples/config.xml");
-			System.out.println(file.getAbsolutePath().toString());
-			ConfigurationFile config = new ConfigurationFile(file);
-			doc = config.getJdomDocument();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+			doc = jdomBuilder.build(file);
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

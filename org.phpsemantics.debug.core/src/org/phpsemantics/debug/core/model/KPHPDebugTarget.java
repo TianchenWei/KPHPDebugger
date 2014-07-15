@@ -24,10 +24,14 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IValue;
 import org.jdom2.Document;
 import org.jdom2.input.DOMBuilder;
+import org.phpsemantics.debug.core.KPHPInterpreter;
 import org.phpsemantics.debug.core.launching.IKPHPLaunchConfigurationConstants;
 import org.xml.sax.SAXException;
 
 public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
+	
+	private KPHPInterpreter interpreter;
+	
 	private Document configuration;
 
 	private ILaunch fLaunch;
@@ -44,9 +48,10 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 	private int count = 3;
 
 
-	public KPHPDebugTarget(ILaunch launch) {
+	public KPHPDebugTarget(ILaunch launch, KPHPInterpreter ki) {
 		super(null);
 		setLaunch(launch);
+		interpreter = ki;
 		fTarget = this;
 		//fProcess = process;
 		fThread = new KPHPThread(this);
@@ -204,5 +209,6 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 	public void setLaunch(ILaunch fLaunch) {
 		this.fLaunch = fLaunch;
 	}
+
 	
 }

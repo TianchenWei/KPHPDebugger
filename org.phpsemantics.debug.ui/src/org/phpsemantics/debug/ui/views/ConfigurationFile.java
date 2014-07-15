@@ -65,7 +65,7 @@ public class ConfigurationFile {
 		
 		String[] value = new String[]{root.getChild("trace").getValue()};
 		
-		root.getChild("instrumentation").getValue()
+		//root.getChild("instrumentation").getValue()
 		
 		System.out.println(root.getChild("trace").getParentElement().toString());
 

@@ -9,8 +9,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.ConcurrentSkipListSet;
-
-import org.eclipse.debug.core.model.IDebugElement;
 import org.phpsemantics.debug.core.launching.IKPHPLaunchConfigurationConstants;
 
 public class InternalScript {

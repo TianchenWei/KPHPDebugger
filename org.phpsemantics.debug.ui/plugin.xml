@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="PHP Semantics"
+            id="org.phpsemantics.debug.ui.views">
+      </category>
+      <view
+            name="Config View"
+            icon="icons/sample.gif"
+            category="org.phpsemantics.debug.ui.views"
+            class="org.phpsemantics.debug.ui.views.ConfigView"
+            id="org.phpsemantics.debug.ui.views.views.ConfigView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.phpsemantics.debug.ui.launching.KPHPTabGroup"
+            id="org.phpsemantics.debug.ui.launchConfigurationTabGroup1"
+            type="org.phpsemantics.debug.core.launchConfigurationType1">
+      </launchConfigurationTabGroup>
+   </extension>
+
+</plugin>

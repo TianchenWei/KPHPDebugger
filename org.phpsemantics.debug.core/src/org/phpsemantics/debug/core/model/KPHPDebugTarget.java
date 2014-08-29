@@ -86,7 +86,7 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 		
 	}
 	
-	private String getScript(int type, int startLine, ArrayList<Integer> stepLineNumbers) throws IOException{
+	private String createInternalScript(int type, int startLine, ArrayList<Integer> stepLineNumbers) throws IOException{
 		if(startLine>=0){
 			Set<Integer>lineNumbers = getBreakpointLineNumbers();
 			// create internal script
@@ -149,7 +149,7 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 
 	protected String createConfig(int type, int startLine, ArrayList<Integer> stepLineNumbers) throws IOException{
 		
-		String path = getScript(type, startLine, stepLineNumbers);
+		String path = createInternalScript(type, startLine, stepLineNumbers);
 			
 		File configuration = Files.createTempFile(Paths.get(args[TEMP_DIR]),CONFIG,XML).toFile();
 	

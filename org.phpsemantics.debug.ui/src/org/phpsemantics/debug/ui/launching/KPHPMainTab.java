@@ -44,11 +44,11 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 		return new KPHPWorkingDirectory();
 	}*/
 	
-	private Text fKToolText;
+	private Text fTempDirText;
 	private Text fKPHPText;
 	private Text fPHPFileText;
 
-	private Button fKToolButton;
+	private Button fTempDirButton;
 	private Button fKPHPButton;
 	private Button fPHPFileButton;
 
@@ -67,8 +67,8 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 		public void widgetSelected(SelectionEvent e) {
 			Object source = e.getSource();
 			
-			if (source == fKToolButton) 
-				handleChangeKPath(fKToolText);				
+			if (source == fTempDirButton) 
+				handleChangeKPath(fTempDirText);				
 			else if(source == fKPHPButton) 
 				handleChangeKPHProot(fKPHPText);		
 			else if (source == fPHPFileButton) 
@@ -89,7 +89,7 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 		Composite comp = SWTFactory.createComposite(parent);
 		
 		createKPHPEditor(comp);
-		createKToolEditor(comp);
+		createTempDirEditor(comp);
 		createScriptEditor(comp);
 
 	//	fWorkingDirectoryBlock.createControl(comp);	
@@ -99,15 +99,15 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 
 	}
 		
-	private void createKToolEditor(Composite parent) {
+	private void createTempDirEditor(Composite parent) {
 		
-		Group group = SWTFactory.createGroup(parent,Messages.SemanticsToolsTab_KTool, 3);
-		fKToolText = SWTFactory.createText(group,2);
-		fKToolText.addModifyListener(fListener);
-		ControlAccessibleListener.addListener(fKToolText, group.getText());
+		Group group = SWTFactory.createGroup(parent,Messages.SemanticsToolsTab_TempDir, 3);
+		fTempDirText = SWTFactory.createText(group,2);
+		fTempDirText.addModifyListener(fListener);
+		ControlAccessibleListener.addListener(fTempDirText, group.getText());
 		
-		fKToolButton = createPushButton(group, Messages.SemanticsToolsTab_1, null); 
-		fKToolButton.addSelectionListener(fListener);
+		fTempDirButton = createPushButton(group, Messages.SemanticsToolsTab_1, null); 
+		fTempDirButton.addSelectionListener(fListener);
 	}
 
 	
@@ -162,9 +162,9 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 			fKPHPText.setText(
 					configuration.getAttribute(
 							IKPHPConstants.ATTR_KPHP_ROOT,"")); //$NON-NLS-1$
-			fKToolText.setText(
+			fTempDirText.setText(
 					configuration.getAttribute(
-							IKPHPConstants.ATTR_KTOOL_BIN, "")); //$NON-NLS-1$
+							IKPHPConstants.ATTR_TEMP_DIR, "")); //$NON-NLS-1$
 			fPHPFileText.setText(
 					configuration.getAttribute(
 							IKPHPConstants.ATTR_FILE_TO_DEBUG, "")); //$NON-NLS-1$
@@ -181,10 +181,10 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 		if((new File(fKPHPText.getText())).isDirectory())
 			configuration.setAttribute(
 					IKPHPConstants.ATTR_KPHP_ROOT, fKPHPText.getText());
-		if((new File(fKToolText.getText())).isDirectory())
+		if((new File(fTempDirText.getText())).isDirectory())
 
 			configuration.setAttribute(
-					IKPHPConstants.ATTR_KTOOL_BIN, fKToolText.getText());
+					IKPHPConstants.ATTR_TEMP_DIR, fTempDirText.getText());
 		if((new File(fPHPFileText.getText())).isFile())
 
 			configuration.setAttribute(
@@ -235,7 +235,7 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 		
 		String selectedDirectory = textField.getText();
 		DirectoryDialog dialog = new DirectoryDialog(getShell());
-		dialog.setMessage(Messages.SemanticsToolsTab_KTool_Prompt);         	
+		dialog.setMessage(Messages.SemanticsToolsTab_TempDir_Prompt);         	
 		selectedDirectory = dialog.open();
 		if (selectedDirectory != null) {
 			textField.setText(selectedDirectory);

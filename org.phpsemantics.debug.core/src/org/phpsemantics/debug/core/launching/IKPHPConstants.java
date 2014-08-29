@@ -43,9 +43,12 @@ public interface IKPHPConstants {
 	public static final String INTERNAL_FILE_PREFIX = "Internal_";
 
 	public static final String INTERNAL_FILE_SUFFIX = ".php";
+	
+	public static final String SCRIPT_SUFFIX = ".php";
 
 	public static final String INTERNAL_FILE_BREAKPOINT_L = "breakpoint(";
 	public static final String INTERNAL_FILE_BREAKPOINT_R = ");";
+	public static final String CONSOLE_NAME = "KPHP";
 
 
 }

@@ -7,7 +7,7 @@ Bundle-Activator: org.phpsemantics.debug.core.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.debug.ui;bundle-version="3.9.0",
- org.eclipse.ui.console;bundle-version="3.5.200"
+ org.eclipse.ui.console
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,

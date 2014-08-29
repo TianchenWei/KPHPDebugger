@@ -11,9 +11,13 @@ public class Messages extends NLS{
 
 	public static String SemanticsToolsTab_1;
 
-	public static String SemanticsToolsTab_KTool;
+/*	public static String SemanticsToolsTab_KTool;
 	
-	public static String SemanticsToolsTab_KTool_Prompt;
+	public static String SemanticsToolsTab_KTool_Prompt;*/
+	
+	public static String SemanticsToolsTab_TempDir;
+	
+	public static String SemanticsToolsTab_TempDir_Prompt;
 
 	public static String SemanticsToolsTab_KPHP;
 

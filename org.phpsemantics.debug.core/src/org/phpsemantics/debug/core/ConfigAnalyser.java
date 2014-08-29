@@ -181,6 +181,19 @@ public class ConfigAnalyser {
 		else 
 			return false;
 	}
+	
+	public static String[] getOutput(Document configuration){
+		ArrayList<String> output = new ArrayList<String>();
+		Element element = getElement(configuration, new String[]{"IO","out"});
+		String value = element.getValue();
+		Pattern ListItem = Pattern.compile("ListItem\\(\"(.+?)\"\\)");  
+		Matcher matcher = ListItem.matcher(value);
+		while(matcher.find()){
+			//if(matcher.group(1).equals("\n"))
+			output.add(matcher.group(1));
+		}
+		return output.toArray(new String[output.size()]);
+	}
 
 	/**
 	 * returns the location of global static scope

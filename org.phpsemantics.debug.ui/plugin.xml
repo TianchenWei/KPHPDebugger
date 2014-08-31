@@ -28,10 +28,10 @@
             class="org.phpsemantics.debug.ui.views.VariableMapView"
             icon="icons/sample.gif"
             id="org.phpsemantics.debug.ui.views.VariableMap"
-            name="VariableMap">
+            name="Variables Graph">
       </view>
       <view
-            name="HeapView"
+            name="Heap"
             icon="icons/sample.gif"
             category="org.phpsemantics.debug.ui.views"
             class="org.phpsemantics.debug.ui.views.HeapView"
@@ -56,36 +56,6 @@
             id="org.phpsemantics.debug.ui.perspective"
             name="KPHP">
       </perspective>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.phpsemantics.debug.ui.perspective">
-             <view
-               id="org.phpsemantics.debug.ui.views.VariableMap"
-               relationship="stack"
-               relative="right"/>
-             <view
-               id="org.eclipse.debug.ui.BreakpointView"
-               relationship="stack"
-               relative="org.phpsemantics.debug.ui.views.VariableMap"/>
-             <view
-               id="org.eclipse.debug.ui.DebugView"
-               relationship="stack"
-               relative="org.phpsemantics.debug.ui.views.VariableMap"/>
-             <view
-                   id="org.phpsemantics.debug.ui.views.ConfigView"
-                   relationship="stack"
-                   relative="bottom"/>
-             <view
-                   id="org.phpsemantics.debug.ui.views.HeapView"
-                   relationship="stack"
-                   relative="bottom"/>
-             <view
-                   id="org.eclipse.ui.console.ConsoleView"
-                   relationship="stack"
-                   relative="org.phpsemantics.debug.ui.views.ConfigView"/>
-      </perspectiveExtension>
    </extension>
       
 <!-- Normal operation group -->

@@ -61,7 +61,7 @@ public class HeapView extends ViewPart {
         column1.setWidth(70);
         TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
         column2.setText("Value");
-        column2.setWidth(500);
+        column2.setWidth(200);
         TreeColumn column3 = new TreeColumn(tree, SWT.LEFT);
         column3.setText("Type");
         column3.setWidth(50);

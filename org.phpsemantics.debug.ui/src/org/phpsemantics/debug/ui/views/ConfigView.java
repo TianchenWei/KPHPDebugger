@@ -86,7 +86,7 @@ public class ConfigView extends ViewPart{
 
 	        TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
 	        column1.setText("Name");
-	        column1.setWidth(400);
+	        column1.setWidth(150);
 	        TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
 	        column2.setText("Value");
 	        column2.setWidth(200);

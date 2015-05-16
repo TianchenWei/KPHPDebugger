@@ -402,16 +402,19 @@ public class ConfigAnalyser {
 	public static void updateHeapMap(Map<String, String> heapMap, String key, String newValue){
 		String regex = "#symLoc\\("+key+"\\)\\|->zval\\((.+?),(.+?),(\\d+),(true|false)\\)";
 		Pattern pattern = Pattern.compile(regex);
-		String oldSymLoc = heapMap.get(key);
-		Matcher matcher = pattern.matcher(oldSymLoc);
-		while(matcher.find()){
-			String newSymLoc = "#symLoc("+key+
-					")|->zval("+newValue+
-					","+matcher.group(2)+
-					","+matcher.group(3)+
-					","+matcher.group(4)+")";
-			heapMap.put(key, newSymLoc);
+		if(heapMap.containsKey(key)){
+			String oldSymLoc = heapMap.get(key);
+			Matcher matcher = pattern.matcher(oldSymLoc);
+			while(matcher.find()){
+				String newSymLoc = "#symLoc("+key+
+						")|->zval("+newValue+
+						","+matcher.group(2)+
+						","+matcher.group(3)+
+						","+matcher.group(4)+")";
+				heapMap.put(key, newSymLoc);
+			}	
 		}
+		
 	}
 	
 	public static void updateConfigurationHeap(Document configuration, Map<String, String> heapMap){

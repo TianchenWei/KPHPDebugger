@@ -85,7 +85,15 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 		}
 		
 	}
-	
+	/**
+	 * create an internal script
+	 * type: a resume script or a step script
+	 * startLine: ingnore all breakpoints before this line
+	 * stepLineNumber: lines allow breakpoint(used for stepping)
+	 * */
+	 //
+    //type: a resume script or a step script
+    //startLine: ingnore all breakpoints before this line
 	private String createInternalScript(int type, int startLine, ArrayList<Integer> stepLineNumbers) throws IOException{
 		if(startLine>=0){
 			Set<Integer>lineNumbers = getBreakpointLineNumbers();
@@ -170,6 +178,34 @@ public class KPHPDebugTarget extends KPHPDebugElement implements IDebugTarget{
 		ConfigAnalyser.updateConfigurationHeap(fThread.getConfiguration(), fThread.getHeapMap());
 		
 		ConfigAnalyser.outputXML(fThread.getConfiguration(), configuration.getAbsolutePath());
+		
+		LineNumberReader lr = new LineNumberReader(
+					Files.newBufferedReader(configuration.toPath(), Charset.defaultCharset()));
+			
+		BufferedWriter out = new BufferedWriter(new FileWriter(configurationEnhanced));           
+			//out.write(breakpoint);
+		
+		//skip<?xml version="1.0" encoding="UTF-8"?>
+		String line = lr.readLine();
+
+			while ((line = lr.readLine ()) != null){
+				line = line.replaceAll("&gt;", ">");
+				out.write(line);
+				out.newLine();    	
+			}
+
+			lr.close();
+			out.close();
+		return configurationEnhanced.getAbsolutePath();
+	}
+	
+	protected String getUpdateConfiguration2(KPHPDebugElement element) throws IOException{
+		
+		File configuration = Files.createTempFile(Paths.get(args[TEMP_DIR]),CONFIG,XML).toFile();
+		File configurationEnhanced = Files.createTempFile(Paths.get(args[TEMP_DIR]),CONFIG,XML).toFile();
+		ConfigAnalyser.updateConfigurationHeap(element.getConfiguration(), element.getHeapMap());
+		
+		ConfigAnalyser.outputXML(element.getConfiguration(), configuration.getAbsolutePath());
 		
 		LineNumberReader lr = new LineNumberReader(
 					Files.newBufferedReader(configuration.toPath(), Charset.defaultCharset()));

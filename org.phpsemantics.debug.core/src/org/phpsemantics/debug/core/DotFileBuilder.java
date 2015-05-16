@@ -1,5 +1,9 @@
 package org.phpsemantics.debug.core;
 
+/**
+ * write .dot files
+ * */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

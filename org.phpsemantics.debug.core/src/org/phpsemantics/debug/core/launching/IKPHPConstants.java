@@ -32,7 +32,7 @@ public interface IKPHPConstants {
 	
 	public static final String EXAMPLE_PHP = "/examples/hello-world/hello-world.php";
 	
-	public static final String DEFAULT_TEMP_DIR = "/tmp/kphp";
+	public static final String DEFAULT_TEMP_DIR = "temp/php";
 
 	public static final String BREAKPOINT_MARKER = "breakpoint()";
 	

@@ -1,5 +1,6 @@
 package org.phpsemantics.debug.ui.views;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -10,6 +11,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.PlatformUI;
 import org.phpsemantics.debug.core.ConfigAnalyser;
+import org.phpsemantics.debug.core.model.KPHPDebugElement;
 import org.phpsemantics.debug.core.model.KPHPThread;
 
 public class HeapViewContentProvider implements ITreeContentProvider, IDebugEventSetListener{
@@ -167,9 +169,17 @@ public class HeapViewContentProvider implements ITreeContentProvider, IDebugEven
 					        	viewer.refresh();
 					        }
 					    });
+					}else if(object instanceof KPHPDebugElement){
+						configuration = ((KPHPDebugElement)object).getCurrentConfigurationPath().toString();
+						heapMap = ConfigAnalyser.getHeapMap(ConfigAnalyser.buildConfig( new File(configuration)));
+						PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+					        public void run() {
+					        	viewer.refresh();
+					        }
+					    });
 					}
 			}
 		}			
-	}
+	}	
 
 }

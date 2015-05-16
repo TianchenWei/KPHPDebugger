@@ -14,7 +14,11 @@ import org.phpsemantics.debug.core.model.KPHPDebugTarget;
 
 public class KPHPLaunchDelegate implements ILaunchConfigurationDelegate{
 
-	@Override
+	/* (non-Javadoc)
+	 * @see org.eclipse.debug.core.model.ILaunchConfigurationDelegate
+	 * #launch(ILaunchConfiguration configuration, String mode,
+			ILaunch launch, IProgressMonitor monitor);
+	 */
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
@@ -41,10 +45,16 @@ public class KPHPLaunchDelegate implements ILaunchConfigurationDelegate{
 				"");
 		File temp = new File(tempDir);
 		if(!temp.isDirectory())
-			//temp = new File(IKPHPConstants.DEFAULT_TEMP_DIR);
 			temp = (new File(file)).getParentFile();
-
-		temp.mkdir();
+	
+		if(!temp.isDirectory())
+			temp = new File(IKPHPConstants.DEFAULT_TEMP_DIR);
+		
+		if(!temp.exists()){
+			temp.mkdir();
+		}
+		
+		tempDir = temp.getAbsolutePath();
 		
 		OutputConsole out = new OutputConsole(IKPHPConstants.CONSOLE_NAME);
 

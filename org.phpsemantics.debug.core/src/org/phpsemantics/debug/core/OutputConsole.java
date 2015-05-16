@@ -84,7 +84,7 @@ public class OutputConsole implements IDebugEventSetListener{
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (int i = 0; i < events.length; i++) {
 			DebugEvent event = events[i];
-			//if (event.getKind() == DebugEvent.CHANGE) {
+			if (event.getKind() == DebugEvent.CHANGE||event.getKind() == DebugEvent.SUSPEND) {
 					Object object = event.getSource();
 					if(object instanceof KPHPDebugElement){
 						File file = ((KPHPDebugElement) object).getCurrentConfigurationPath().toFile();
@@ -97,7 +97,7 @@ public class OutputConsole implements IDebugEventSetListener{
 						}
 					}
 			}
-		//}
+		}
 	}
 
 }

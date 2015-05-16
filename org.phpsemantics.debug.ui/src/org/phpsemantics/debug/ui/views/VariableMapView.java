@@ -41,11 +41,9 @@ private DotFileBuilder dfb = new DotFileBuilder();
 							dfb.setConfiguration((ConfigAnalyser.buildConfig(new File(configuration))));
 							int startSymLoc = ConfigAnalyser.getSymLocID(((Element)obj).getContent());
 							String dotFile = dfb.writeDotFile(startSymLoc);
-							graph = GraphBuilder.Tgif(dotFile);
+							graph = GraphBuilder.Tgif2(dotFile);
 						
 						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					}
@@ -58,11 +56,7 @@ private DotFileBuilder dfb = new DotFileBuilder();
 					String dotFile;
 					try {
 						dotFile = dfb.writeDotFile(startSymLoc);
-						try {
-							graph = GraphBuilder.Tgif(dotFile);
-						} catch (IOException | InterruptedException e) {
-							e.printStackTrace();
-						}
+							graph = GraphBuilder.Tgif2(dotFile);
 
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();

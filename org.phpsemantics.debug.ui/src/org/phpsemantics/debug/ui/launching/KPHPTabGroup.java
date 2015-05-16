@@ -20,7 +20,7 @@ public class KPHPTabGroup extends AbstractLaunchConfigurationTabGroup {
 				new KPHPMainTab(),	
 				new SourceLookupTab(),
 				new CommonTab(),
-				new EnvironmentTab()
+				new EnvironmentTab(),
 		};
 	setTabs(tabs);	
 	}

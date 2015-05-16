@@ -93,8 +93,10 @@ public class KPHPVariable extends KPHPDebugElement implements IVariable {
 		if(fStackFrame.getThread() instanceof KPHPThread){
 			((KPHPThread)fStackFrame.getThread()).
 				modifyHeapMap(attributes[LOCATION], expression);
+			fStackFrame.modifyHeapMap(attributes[LOCATION], expression);
 			value = new KPHPValue(getDebugTarget(), fStackFrame, 
 					Integer.parseInt(attributes[LOCATION]), expression);
+			fireCreationEvent();
 
 		}
 		

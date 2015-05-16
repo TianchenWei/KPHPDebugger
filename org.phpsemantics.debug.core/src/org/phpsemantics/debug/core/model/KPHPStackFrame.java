@@ -30,10 +30,24 @@ import org.phpsemantics.debug.core.ConfigAnalyser;
 public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 
 	private boolean fStepping = false;
+	
+	private boolean modified = false;
 
 	private KPHPThread fThread;
 		
 	private String functionName;
+
+	protected boolean getModified(){
+		return modified;
+	}
+	protected void setModified(boolean flag){
+		modified = flag;			
+	}
+	
+	protected void modifyHeapMap(String key, String newValue){
+		ConfigAnalyser.updateHeapMap(heapMap,key, newValue );
+		modified = true;
+	}
 		
 	public String getFunctionName() {
 		return functionName;
@@ -82,10 +96,11 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 	}
 	
 	private void init(){
-
+		configurationAbsolutePaths.add(configuration.getBaseURI().replace("file:", ""));
 		//configuration = fThread.getConfiguration();
 		linePointer = fThread.getLinePointer();
-		
+		heapMap = ConfigAnalyser.getHeapMap(configuration);
+
 		String symLoc;
 		if (functionName.equals("main")){
 			symLoc = ConfigAnalyser.getSuperGlobalScope(configuration);
@@ -114,7 +129,6 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 		}
 	}
 	
-	
 /*	
 	private void updateVariables(){
 		
@@ -134,10 +148,6 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 			}
 		}
 	}*/
-	
-
-	
-	
 	
 	protected String[] getValueAttributes(int symLocId){
 		String symLoc = ConfigAnalyser.getSymLocAt(
@@ -164,7 +174,7 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 
 	@Override
 	public boolean canStepReturn() {
-		return fThread.canResume();
+		return false;
 	}
 
 	@Override
@@ -195,6 +205,7 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 
 	@Override
 	public void stepOver() throws DebugException {
+	
 		if(ConfigAnalyser.getLineNumber(configuration)==endLine){
 			//fThread.getCallingStack(this).stepOver();
 			//fThread.stepReturn();
@@ -202,32 +213,40 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 			//if (fThread.linePointer>startLine&& fThread.linePointer<endLine)
 
 		}else{
-			if(configurationAbsolutePaths.isEmpty()){
+			if(configurationAbsolutePaths.size()<=1){
 				try {
 					String newConfiguration = getDebugTarget().createConfig(STEP, ConfigAnalyser.getLineNumber(configuration)+1, effectiveLines);
 					configurationAbsolutePaths.add(newConfiguration);
 					configuration = buildConfiguration(newConfiguration);
+					heapMap = ConfigAnalyser.getHeapMap(configuration);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}else{
+				if(modified){
+					
+					try {
+						String updatedConfiguration = getDebugTarget().getUpdateConfiguration2(this);
+						configurationAbsolutePaths.removeLast();
+						configurationAbsolutePaths.add(updatedConfiguration);
+						configuration = buildConfiguration(updatedConfiguration);
+						modified = false;
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 				try {
 					String newConfiguration = getDebugTarget().getNextConfig(configurationAbsolutePaths.getLast());
 					configurationAbsolutePaths.add(newConfiguration);
 					configuration = buildConfiguration(newConfiguration);
+					heapMap = ConfigAnalyser.getHeapMap(configuration);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			int newLinePointer = ConfigAnalyser.getLineNumber(configuration);
-			if(newLinePointer >0){
-				linePointer = newLinePointer;
-			}
 			fThread.updateStackFrames(this);
 //			fThread.setLinePointer(ConfigAnalyser.getLineNumber(configuration));
-			fThread.fireSuspendEvent(0);
 			fireChangeEvent(0);
-			suspend();		
 		}
 		
 	}
@@ -259,7 +278,6 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 
 	@Override
 	public void suspend() throws DebugException {
-		fThread.suspend();
 	}
 
 	@Override
@@ -295,7 +313,11 @@ public class KPHPStackFrame extends KPHPDebugElement implements IStackFrame {
 
 	@Override
 	public int getLineNumber() throws DebugException {
-		return linePointer;
+		int newLinePointer = ConfigAnalyser.getLineNumber(configuration);
+		if(newLinePointer >0){
+			return newLinePointer;
+		}
+		return fThread.linePointer;
 //		return ConfigAnalyser.getLineNumber(configuration);
 //		return fThread.linePointer;
 	}

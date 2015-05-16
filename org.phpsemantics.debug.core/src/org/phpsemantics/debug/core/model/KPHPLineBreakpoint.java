@@ -6,7 +6,6 @@ public class KPHPLineBreakpoint extends LineBreakpoint{
 
 	@Override
 	public String getModelIdentifier() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

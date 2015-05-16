@@ -13,8 +13,6 @@ package org.phpsemantics.debug.core.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.eclipse.debug.core.DebugException;
@@ -41,9 +39,7 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 	
 	//breakpoints set
 	private ConcurrentSkipListSet<Integer> set = new ConcurrentSkipListSet<Integer>();
-		
-	private  LinkedHashMap<String, String> heapMap = new LinkedHashMap<String,String>();
-	
+			
 	public KPHPThread(KPHPDebugTarget target) {
 		super(target);
 		init();
@@ -88,7 +84,9 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 		fStackFrame = new KPHPStackFrame(getDebugTarget(), "main", getConfiguration());
 		stackFrames.add(fStackFrame);
 		fStackFrames = stackFrames.toArray(new KPHPStackFrame[stackFrames.size()]);
-		
+		//
+		fireSuspendEvent(0);
+
 	}
 	
 	protected KPHPStackFrame getCallingStack(KPHPStackFrame currentStackFrame){
@@ -123,8 +121,13 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 		}
 
 		fStackFrame = new KPHPStackFrame(getDebugTarget(), "main", stackframe.getConfiguration());
+		if(fStackFrame.getFunctionName().equals("main")){
+			fStackFrame.setLinePointer(stackframe.getLinePointer());
+			fStackFrame.setConfigurationAbsolutePaths(stackframe.getConfigurationAbsolutePaths());
+		}
 		stackFrames.add(fStackFrame);
 		fStackFrames = stackFrames.toArray(new KPHPStackFrame[stackFrames.size()]);
+		fireSuspendEvent(0);
 	}
 	
 	protected boolean getModified(){
@@ -132,10 +135,6 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 	}
 	protected void setModified(boolean flag){
 		modified = flag;			
-	}
-	
-	public Map<String, String> getHeapMap(){
-		return heapMap;
 	}
 	
 	protected int getNextLinePointer(){
@@ -154,13 +153,11 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 	
 	@Override
 	public boolean canSuspend() {
-		return !isSuspended()&&!isTerminated();
-		
+		return false;
 	}
 	
 	@Override
 	public boolean isSuspended() {
-		
 		return fSuspend;
 	}
 
@@ -191,7 +188,6 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 				configuration = buildConfiguration(newConfiguration);
 				linePointer = newNextLinePointer;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else{
@@ -204,6 +200,7 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 				e.printStackTrace();
 			}
 		}
+		fireChangeEvent(0);
 		updateStackFrames();
 		suspend();
 	}
@@ -217,7 +214,7 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 
 	@Override
 	public boolean canStepInto() {	
-		return true ;	
+		return false ;	
 	}
 
 	@Override
@@ -237,18 +234,14 @@ public class KPHPThread extends KPHPDebugElement implements IThread {
 
 	@Override
 	public void stepInto() throws DebugException {
-
-
 	}
 
 	@Override
 	public void stepOver() throws DebugException {
-	
 	}
 
 	@Override
 	public void stepReturn() throws DebugException {
-
 	}
 
 	@Override

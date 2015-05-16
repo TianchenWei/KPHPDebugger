@@ -2,6 +2,7 @@ package org.phpsemantics.debug.ui.launching;
 
 
 import java.io.File;
+import java.nio.file.Path;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -80,7 +81,6 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	public KPHPMainTab(){
-	//	fWorkingDirectoryBlock = createWorkingDirBlock();
 
 	}
 	
@@ -91,8 +91,6 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 		createKPHPEditor(comp);
 		createTempDirEditor(comp);
 		createScriptEditor(comp);
-
-	//	fWorkingDirectoryBlock.createControl(comp);	
 		
 		setControl(comp);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), getHelpContextId());
@@ -147,6 +145,19 @@ public class KPHPMainTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+		
+		File classPath= new File(KPHPMainTab.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+		Path path = classPath.toPath();		
+		while(path.getParent()!=null && !path.endsWith("dropins")){
+			path = path.getParent();	
+		}
+		if(path.endsWith("dropins")){
+			Path kphp_dir = path.resolve("tools/kphp2");
+			if(kphp_dir.toFile().exists())
+				configuration.setAttribute(IKPHPConstants.ATTR_KPHP_ROOT, kphp_dir.toString());
+		}
+		//configuration.setAttribute(IKPHPConstants.ATTR_KPHP_ROOT, kphp_dir.getAbsolutePath());
+
 		
 		//IPath path = Utilities.searchActiveScript();
 		//IPath path = null;

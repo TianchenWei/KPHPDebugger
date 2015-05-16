@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.eclipse.debug.core.model.DebugElement;
@@ -17,6 +19,11 @@ public abstract class KPHPDebugElement extends DebugElement {
 	
 	public static final int RESUME = 0;
 	public static final int STEP = 1;
+	protected  LinkedHashMap<String, String> heapMap = new LinkedHashMap<String,String>();
+	
+	public Map<String, String> getHeapMap(){
+		return heapMap;
+	}
 	protected LinkedList<String> configurationAbsolutePaths = new LinkedList<String>();
 	public LinkedList<String> getConfigurationAbsolutePaths() {
 		return configurationAbsolutePaths;
